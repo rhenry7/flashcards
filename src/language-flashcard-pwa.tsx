@@ -43,6 +43,8 @@ const allRules: GrammarRule[] = [
 
 // Function to generate flashcards from a rule's examples
 function generateFlashcardsFromRule(rule: GrammarRule): GeneratedFlashcard[] {
+  if (!rule || !Array.isArray((rule as any).examples)) return [];
+
   return rule.examples.map((example, idx) => ({
     id: `${rule.id}_${idx}`,
     ruleId: rule.id,
@@ -403,6 +405,13 @@ export default function LanguageLearningApp() {
     setGrammarIndex(0);
     setFlipped(false);
   }, [selectedLevel, selectedCategory]);
+
+  // Ensure grammarIndex is within bounds when filteredFlashcards changes
+  useEffect(() => {
+    if (grammarIndex >= filteredFlashcards.length && filteredFlashcards.length > 0) {
+      setGrammarIndex(0);
+    }
+  }, [filteredFlashcards.length]);
 
   const handleNext = (current: number, max: number, setCurrent: (val: number) => void) => {
     setCurrent((current + 1) % max);
