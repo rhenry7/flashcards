@@ -1,0 +1,41 @@
+[
+    {
+      "id": "b1_imparfait_vs_passe",
+      "level": "B1",
+      "category": "tense",
+      "english": "Past description vs action",
+      "french": "Imparfait vs passé composé",
+      "examples": [
+        { "en": "I was tired when I arrived", "fr": "J'étais fatigué quand je suis arrivé" },
+        { "en": "I was tired when I left", "fr": "J'étais fatigué quand je suis parti" },
+        { "en": "I was young when I arrived", "fr": "J'étais jeune quand je suis arrivé" },
+        { "en": "I was young when I left", "fr": "J'étais jeune quand je suis parti" }
+      ],
+      "tags": ["contrast"]
+    },
+    {
+      "id": "b1_conditional_polite",
+      "level": "B1",
+      "category": "mood",
+      "english": "Polite request",
+      "french": "Conditionnel de politesse",
+      "examples": [
+        { "en": "I would like coffee", "fr": "Je voudrais un café" },
+        { "en": "I would like help", "fr": "Je voudrais de l'aide" }
+      ],
+      "tags": ["conditional"]
+    },
+    {
+      "id": "b1_relative_que",
+      "level": "B1",
+      "category": "syntax",
+      "english": "Relative pronoun that",
+      "french": "Pronom relatif que",
+      "examples": [
+        { "en": "The book that I read", "fr": "Le livre que j'ai lu" },
+        { "en": "The book that I watched", "fr": "Le livre que j'ai regardé" },
+        { "en": "The movie that I watched", "fr": "Le film que j'ai regardé" }
+      ],
+      "tags": ["relative"]
+    }
+  ]

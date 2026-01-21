@@ -1,0 +1,208 @@
+[
+    {
+      "id": "b2_subjunctive_need",
+      "level": "B2",
+      "category": "mood",
+      "english": "Necessity with that",
+      "french": "Subjonctif après il faut que",
+      "examples": [
+        { "en": "It is necessary that he come", "fr": "Il faut qu'il vienne" },
+        { "en": "It is necessary that he leave", "fr": "Il faut qu'il parte" }
+      ],
+      "tags": ["subjunctive"]
+    },
+    {
+      "id": "b2_passive",
+      "level": "B2",
+      "category": "syntax",
+      "english": "Passive voice",
+      "french": "Voix passive",
+      "examples": [
+        { "en": "The book was written", "fr": "Le livre a été écrit" },
+        { "en": "The house was built", "fr": "La maison a été construite" }
+      ],
+      "tags": ["passive"]
+    },
+    {
+      "id": "b2_hypothesis_si",
+      "level": "B2",
+      "category": "syntax",
+      "english": "Hypothetical condition",
+      "french": "Phrase avec si",
+      "examples": [
+        { "en": "If I had time, I would go", "fr": "Si j'avais le temps, j'irais" },
+        { "en": "If I had time, I would help", "fr": "Si j'avais le temps, j'aiderais" },
+        { "en": "If I knew, I would go", "fr": "Si je savais, j'irais" },
+        { "en": "If I knew, I would help", "fr": "Si je savais, j'aiderais" }
+      ],
+      "tags": ["hypothesis"]
+    },
+    {
+      "id": "b2_si_present_future",
+      "level": "B2",
+      "category": "syntax",
+      "english": "Real condition (present → future)",
+      "french": "Si + présent → futur",
+      "examples": [
+        { "en": "If it rains, I will stay", "fr": "S'il pleut, je resterai" },
+        { "en": "If you come, we will start", "fr": "Si tu viens, on commencera" }
+      ],
+      "tags": ["si", "condition"]
+    },
+    {
+      "id": "b2_si_imparfait_conditional",
+      "level": "B2",
+      "category": "syntax",
+      "english": "Unreal present condition",
+      "french": "Si + imparfait → conditionnel présent",
+      "examples": [
+        { "en": "If I were rich, I would travel", "fr": "Si j'étais riche, je voyagerais" },
+        { "en": "If we had time, we would stay", "fr": "Si on avait le temps, on resterait" }
+      ],
+      "tags": ["si", "hypothesis"]
+    },
+    {
+      "id": "b2_si_plusqueparfait_conditional_past",
+      "level": "B2",
+      "category": "syntax",
+      "english": "Unreal past condition",
+      "french": "Si + plus-que-parfait → conditionnel passé",
+      "examples": [
+        { "en": "If I had known, I would have helped", "fr": "Si j'avais su, j'aurais aidé" },
+        { "en": "If we had left earlier, we would have arrived", "fr": "Si on était partis plus tôt, on serait arrivés" }
+      ],
+      "tags": ["si", "hypothesis"]
+    },
+    {
+      "id": "b2_ne_plus",
+      "level": "B2",
+      "category": "negation",
+      "english": "No longer",
+      "french": "Ne… plus",
+      "examples": [
+        { "en": "I no longer smoke", "fr": "Je ne fume plus" },
+        { "en": "She no longer lives here", "fr": "Elle ne vit plus ici" }
+      ],
+      "tags": ["negation"]
+    },
+    {
+      "id": "b2_ne_jamais",
+      "level": "B2",
+      "category": "negation",
+      "english": "Never",
+      "french": "Ne… jamais",
+      "examples": [
+        { "en": "I never understood", "fr": "Je n'ai jamais compris" },
+        { "en": "He never came back", "fr": "Il n'est jamais revenu" }
+      ],
+      "tags": ["negation"]
+    },
+    {
+      "id": "b2_n_y_a",
+      "level": "B2",
+      "category": "syntax",
+      "english": "There is / there are (negative)",
+      "french": "Il n’y a",
+      "examples": [
+        { "en": "There is nothing to do", "fr": "Il n'y a rien à faire" },
+        { "en": "There is no solution", "fr": "Il n'y a pas de solution" }
+      ],
+      "tags": ["impersonal"]
+    },
+    {
+      "id": "b2_y_pronoun",
+      "level": "B2",
+      "category": "pronouns",
+      "english": "Replacing a place or idea",
+      "french": "Pronom y",
+      "examples": [
+        { "en": "I’m going there", "fr": "J’y vais" },
+        { "en": "I’m thinking about it", "fr": "J’y pense" }
+      ],
+      "tags": ["pronouns"]
+    },
+    {
+      "id": "b2_en_pronoun",
+      "level": "B2",
+      "category": "pronouns",
+      "english": "Replacing a quantity",
+      "french": "Pronom en",
+      "examples": [
+        { "en": "I want some", "fr": "J’en veux" },
+        { "en": "I talked about it", "fr": "J’en ai parlé" }
+      ],
+      "tags": ["pronouns"]
+    },
+    {
+      "id": "b2_double_pronouns",
+      "level": "B2",
+      "category": "pronouns",
+      "english": "Two object pronouns together",
+      "french": "Double pronom",
+      "examples": [
+        { "en": "I gave it to him", "fr": "Je le lui ai donné" },
+        { "en": "She sent them to us", "fr": "Elle nous les a envoyés" }
+      ],
+      "tags": ["pronouns"]
+    },
+    {
+      "id": "b2_inversion_question",
+      "level": "B2",
+      "category": "syntax",
+      "english": "Formal question inversion",
+      "french": "Inversion sujet-verbe",
+      "examples": [
+        { "en": "Do you understand?", "fr": "Comprenez-vous ?" },
+        { "en": "Is he coming?", "fr": "Vient-il ?" }
+      ],
+      "tags": ["questions"]
+    },
+    {
+      "id": "b2_ne_expletif",
+      "level": "B2",
+      "category": "syntax",
+      "english": "Expletive ne (no negation meaning)",
+      "french": "Ne explétif",
+      "examples": [
+        { "en": "Before he arrives", "fr": "Avant qu'il ne vienne" },
+        { "en": "Unless it rains", "fr": "À moins qu'il ne pleuve" }
+      ],
+      "tags": ["advanced"]
+    },
+    {
+      "id": "b2_conditionnel_polite",
+      "level": "B2",
+      "category": "mood",
+      "english": "Polite request",
+      "french": "Conditionnel de politesse",
+      "examples": [
+        { "en": "I would like a coffee", "fr": "Je voudrais un café" },
+        { "en": "Could you help me?", "fr": "Pourriez-vous m'aider ?" }
+      ],
+      "tags": ["conditionnel"]
+    },
+    {
+      "id": "b2_subjunctive_emotion",
+      "level": "B2",
+      "category": "mood",
+      "english": "Subjunctive after emotion",
+      "french": "Subjonctif après émotion",
+      "examples": [
+        { "en": "I’m happy you came", "fr": "Je suis content que tu sois venu" },
+        { "en": "She’s afraid he leaves", "fr": "Elle a peur qu'il parte" }
+      ],
+      "tags": ["subjonctif"]
+    },
+    {
+      "id": "b2_time_sequence",
+      "level": "B2",
+      "category": "syntax",
+      "english": "Sequence of tenses",
+      "french": "Concordance des temps",
+      "examples": [
+        { "en": "I thought he was coming", "fr": "Je pensais qu'il venait" },
+        { "en": "She said she would leave", "fr": "Elle a dit qu'elle partirait" }
+      ],
+      "tags": ["tenses"]
+    }
+  ]

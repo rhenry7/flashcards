@@ -1,0 +1,56 @@
+[
+    {
+      "id": "a2_passe_compose",
+      "level": "A2",
+      "category": "tense",
+      "english": "Completed past action",
+      "french": "Passé composé",
+      "examples": [
+        { "en": "I ate", "fr": "J'ai mangé" },
+        { "en": "I finished", "fr": "J'ai fini" },
+        { "en": "He ate", "fr": "Il a mangé" },
+        { "en": "He finished", "fr": "Il a fini" }
+      ],
+      "tags": ["past", "passe-compose"]
+    },
+    {
+      "id": "a2_imparfait",
+      "level": "A2",
+      "category": "tense",
+      "english": "Ongoing past state",
+      "french": "Imparfait",
+      "examples": [
+        { "en": "I was tired", "fr": "J'étais fatigué" },
+        { "en": "I was happy", "fr": "J'étais heureux" },
+        { "en": "She was tired", "fr": "Elle était fatiguée" },
+        { "en": "She was happy", "fr": "Elle était heureuse" }
+      ],
+      "tags": ["imparfait"]
+    },
+    {
+      "id": "a2_future_simple",
+      "level": "A2",
+      "category": "tense",
+      "english": "Simple future",
+      "french": "Futur simple",
+      "examples": [
+        { "en": "I will go", "fr": "J'irai" },
+        { "en": "I will win", "fr": "Je gagnerai" },
+        { "en": "They will go", "fr": "Ils iront" },
+        { "en": "They will win", "fr": "Ils gagneront" }
+      ],
+      "tags": ["future"]
+    },
+    {
+      "id": "a2_pronoun_y",
+      "level": "A2",
+      "category": "pronoun",
+      "english": "Object pronoun there",
+      "french": "Pronom y",
+      "examples": [
+        { "en": "I go there", "fr": "J'y vais" },
+        { "en": "He goes there", "fr": "Il y va" }
+      ],
+      "tags": ["pronouns"]
+    }
+  ]

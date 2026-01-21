@@ -1,0 +1,76 @@
+[
+    {
+      "id": "a1_svo",
+      "level": "A1",
+      "category": "syntax",
+      "english": "Subject + Verb + Object",
+      "french": "Sujet + Verbe + Complément",
+      "examples": [
+        { "en": "I eat apples", "fr": "Je mange des pommes" },
+        { "en": "I like apples", "fr": "J'aime les pommes" },
+        { "en": "I like music", "fr": "J'aime la musique" },
+        { "en": "She eats apples", "fr": "Elle mange des pommes" },
+        { "en": "She likes apples", "fr": "Elle aime les pommes" },
+        { "en": "She likes music", "fr": "Elle aime la musique" },
+        { "en": "We eat apples", "fr": "Nous mangeons des pommes" },
+        { "en": "We like apples", "fr": "Nous aimons les pommes" },
+        { "en": "We like music", "fr": "Nous aimons la musique" }
+      ],
+      "tags": ["word-order"]
+    },
+    {
+      "id": "a1_present_etre",
+      "level": "A1",
+      "category": "tense",
+      "english": "Present tense of to be",
+      "french": "Présent du verbe être",
+      "examples": [
+        { "en": "I am happy", "fr": "Je suis heureux" },
+        { "en": "I am ready", "fr": "Je suis prêt" },
+        { "en": "He is happy", "fr": "Il est heureux" },
+        { "en": "He is ready", "fr": "Il est prêt" }
+      ],
+      "tags": ["present", "etre"]
+    },
+    {
+      "id": "a1_negation_pas",
+      "level": "A1",
+      "category": "negation",
+      "english": "Negation with do not",
+      "french": "Négation avec ne...pas",
+      "examples": [
+        { "en": "I do not understand", "fr": "Je ne comprends pas" },
+        { "en": "I do not like", "fr": "Je n'aime pas" },
+        { "en": "We do not understand", "fr": "Nous ne comprenons pas" },
+        { "en": "We do not like", "fr": "Nous n'aimons pas" }
+      ],
+      "tags": ["negation"]
+    },
+    {
+      "id": "a1_questions_estceque",
+      "level": "A1",
+      "category": "question",
+      "english": "Questions with do you",
+      "french": "Questions avec est-ce que",
+      "examples": [
+        { "en": "Do you speak French?", "fr": "Est-ce que tu parles français ?" },
+        { "en": "Do you like French?", "fr": "Est-ce que tu aimes le français ?" },
+        { "en": "Do you like coffee?", "fr": "Est-ce que tu aimes le café ?" }
+      ],
+      "tags": ["questions"]
+    },
+    {
+      "id": "a1_adjectives_position",
+      "level": "A1",
+      "category": "adjective",
+      "english": "Adjectives after the noun",
+      "french": "Adjectifs après le nom",
+      "examples": [
+        { "en": "a red car", "fr": "une voiture rouge" },
+        { "en": "a red house", "fr": "une maison rouge" },
+        { "en": "a big car", "fr": "une voiture grande" },
+        { "en": "a big house", "fr": "une maison grande" }
+      ],
+      "tags": ["adjectives"]
+    }
+  ]
