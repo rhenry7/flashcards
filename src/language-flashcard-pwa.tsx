@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
-import { BookOpen, MessageSquare, Brain, Languages, ChevronLeft, ChevronRight, RotateCw, Check, X, Filter, Plus, XCircle } from 'lucide-react';
+import { BookOpen, MessageSquare, Brain, Languages, ChevronLeft, ChevronRight, RotateCw, Check, X, Filter, Plus, XCircle, Grid } from 'lucide-react';
 import a1Data from './a1.json';
 import a2Data from './a2.json';
 import b1Data from './b1.json';
@@ -73,33 +73,14 @@ const vocabData = [
   { english: "Car", french: "Voiture", category: "Transport" }
 ];
 
-const quizData = [
-  {
-    question: "How do you say 'Hello' in French?",
-    options: ["Au revoir", "Bonjour", "Merci", "S'il vous plaît"],
-    correct: 1
-  },
-  {
-    question: "Translate: Je suis heureux",
-    options: ["I am sad", "I am happy", "I am tired", "I am hungry"],
-    correct: 1
-  },
-  {
-    question: "What is 'cat' in French?",
-    options: ["Chien", "Chat", "Oiseau", "Poisson"],
-    correct: 1
-  },
-  {
-    question: "Translate: Où est la maison?",
-    options: ["Where is the house?", "What is the house?", "Who is the house?", "When is the house?"],
-    correct: 0
-  },
-  {
-    question: "How do you say 'Thank you' in French?",
-    options: ["Bonjour", "Au revoir", "Merci", "Pardon"],
-    correct: 2
-  }
-];
+interface QuizQuestion {
+  question: string;
+  questionText: string;
+  options: string[];
+  correct: number;
+  flashcardId: string;
+  direction: 'en-fr' | 'fr-en';
+}
 
 interface FlashCardProps {
   front: string;
@@ -322,6 +303,15 @@ const AddFlashcardForm = ({ onClose, onAdd, availableLevels, availableCategories
   );
 };
 
+interface MatchCard {
+  id: string;
+  content: string;
+  language: 'en' | 'fr';
+  flashcardId: string;
+  isFlipped: boolean;
+  isMatched: boolean;
+}
+
 export default function LanguageLearningApp() {
   const [activeTab, setActiveTab] = useState('grammar');
   const [grammarIndex, setGrammarIndex] = useState(0);
@@ -330,12 +320,19 @@ export default function LanguageLearningApp() {
   const [flipped, setFlipped] = useState(false);
   const [quizAnswers, setQuizAnswers] = useState<number[]>([]);
   const [showQuizResult, setShowQuizResult] = useState(false);
+  const [quizQuestions, setQuizQuestions] = useState<QuizQuestion[]>([]);
   const [translationInput, setTranslationInput] = useState('');
   const [translationResult, setTranslationResult] = useState('');
   const [translationDirection, setTranslationDirection] = useState('en-fr');
   const [selectedLevel, setSelectedLevel] = useState<string>('all');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [showAddForm, setShowAddForm] = useState(false);
+  // Memory match game state
+  const [matchCards, setMatchCards] = useState<MatchCard[]>([]);
+  const [selectedCards, setSelectedCards] = useState<number[]>([]);
+  const [matchScore, setMatchScore] = useState(0);
+  const [matchPairs, setMatchPairs] = useState(0);
+  const [isCheckingMatch, setIsCheckingMatch] = useState(false);
   const [customFlashcards, setCustomFlashcards] = useState<GeneratedFlashcard[]>(() => {
     // Load from localStorage on mount
     try {
@@ -431,14 +428,64 @@ export default function LanguageLearningApp() {
 
   const calculateScore = () => {
     return quizAnswers.reduce((score, answer, index) => {
-      return score + (answer === quizData[index].correct ? 1 : 0);
+      return score + (answer === quizQuestions[index]?.correct ? 1 : 0);
     }, 0);
   };
 
-  const resetQuiz = () => {
+  // Generate quiz questions from flashcards
+  const generateQuizQuestions = () => {
+    const availableCards = filteredFlashcards.length > 0 ? filteredFlashcards : combinedFlashcards;
+    
+    if (availableCards.length === 0) {
+      setQuizQuestions([]);
+      return;
+    }
+
+    // Select random flashcards for questions (10 questions or all available if less)
+    const numQuestions = Math.min(10, availableCards.length);
+    const shuffled = [...availableCards].sort(() => Math.random() - 0.5);
+    const selectedCards = shuffled.slice(0, numQuestions);
+
+    const questions: QuizQuestion[] = selectedCards.map((flashcard) => {
+      // Randomly decide if question is English->French or French->English
+      const direction = Math.random() > 0.5 ? 'en-fr' : 'fr-en';
+      const questionText = direction === 'en-fr' ? flashcard.english : flashcard.french;
+      const correctAnswer = direction === 'en-fr' ? flashcard.french : flashcard.english;
+
+      // Get wrong answers from other flashcards
+      const otherCards = availableCards.filter(c => c.id !== flashcard.id);
+      const shuffledOthers = [...otherCards].sort(() => Math.random() - 0.5);
+      const numWrongAnswers = Math.min(3, otherCards.length);
+      const wrongAnswers = shuffledOthers
+        .slice(0, numWrongAnswers)
+        .map(c => direction === 'en-fr' ? c.french : c.english);
+
+      // If we don't have enough wrong answers, we'll have fewer options (minimum 2)
+      const allOptions = [correctAnswer, ...wrongAnswers].sort(() => Math.random() - 0.5);
+      const correctIndex = allOptions.indexOf(correctAnswer);
+
+      return {
+        question: direction === 'en-fr' 
+          ? `Translate to French: "${questionText}"`
+          : `Translate to English: "${questionText}"`,
+        questionText,
+        options: allOptions,
+        correct: correctIndex,
+        flashcardId: flashcard.id,
+        direction
+      };
+    });
+
+    // Shuffle the questions themselves
+    const shuffledQuestions = questions.sort(() => Math.random() - 0.5);
+    setQuizQuestions(shuffledQuestions);
     setQuizAnswers([]);
     setQuizIndex(0);
     setShowQuizResult(false);
+  };
+
+  const resetQuiz = () => {
+    generateQuizQuestions();
   };
 
   const handleTranslate = () => {
@@ -495,11 +542,138 @@ export default function LanguageLearningApp() {
     setShowAddForm(false);
   };
 
+  // Initialize memory match game
+  const initializeMatchGame = () => {
+    // Get a random subset of flashcards (6-8 pairs)
+    const availableCards = filteredFlashcards.length > 0 ? filteredFlashcards : combinedFlashcards;
+    const numPairs = Math.min(6, Math.floor(availableCards.length / 2));
+    
+    if (numPairs === 0) {
+      setMatchCards([]);
+      return;
+    }
+
+    // Randomly select pairs
+    const shuffled = [...availableCards].sort(() => Math.random() - 0.5);
+    const selectedPairs = shuffled.slice(0, numPairs);
+
+    // Create match cards (English and French for each pair)
+    const cards: MatchCard[] = [];
+    selectedPairs.forEach((flashcard) => {
+      cards.push({
+        id: `en_${flashcard.id}`,
+        content: flashcard.english,
+        language: 'en',
+        flashcardId: flashcard.id,
+        isFlipped: false,
+        isMatched: false
+      });
+      cards.push({
+        id: `fr_${flashcard.id}`,
+        content: flashcard.french,
+        language: 'fr',
+        flashcardId: flashcard.id,
+        isFlipped: false,
+        isMatched: false
+      });
+    });
+
+    // Shuffle the cards
+    const shuffledCards = cards.sort(() => Math.random() - 0.5);
+    setMatchCards(shuffledCards);
+    setSelectedCards([]);
+    setMatchScore(0);
+    setMatchPairs(0);
+  };
+
+  // Handle card click in memory match game
+  const handleMatchCardClick = (index: number) => {
+    if (isCheckingMatch || matchCards[index].isFlipped || matchCards[index].isMatched) {
+      return;
+    }
+
+    const newSelectedCards = [...selectedCards, index];
+    const newCards = [...matchCards];
+    newCards[index].isFlipped = true;
+    setMatchCards(newCards);
+    setSelectedCards(newSelectedCards);
+
+    // If two cards are selected, check for match
+    if (newSelectedCards.length === 2) {
+      setIsCheckingMatch(true);
+      const [firstIndex, secondIndex] = newSelectedCards;
+      const firstCard = newCards[firstIndex];
+      const secondCard = newCards[secondIndex];
+
+      // Check if they match (same flashcardId and different languages)
+      if (firstCard.flashcardId === secondCard.flashcardId && firstCard.language !== secondCard.language) {
+        // Match found!
+        setTimeout(() => {
+          const updatedCards = [...newCards];
+          updatedCards[firstIndex].isMatched = true;
+          updatedCards[secondIndex].isMatched = true;
+          setMatchCards(updatedCards);
+          setSelectedCards([]);
+          setMatchScore(prev => prev + 1);
+          setMatchPairs(prev => prev + 1);
+          setIsCheckingMatch(false);
+        }, 500);
+      } else {
+        // No match, flip cards back
+        setTimeout(() => {
+          const updatedCards = [...newCards];
+          updatedCards[firstIndex].isFlipped = false;
+          updatedCards[secondIndex].isFlipped = false;
+          setMatchCards(updatedCards);
+          setSelectedCards([]);
+          setIsCheckingMatch(false);
+        }, 1000);
+      }
+    }
+  };
+
+  // Initialize game when match tab is opened or filters change
+  useEffect(() => {
+    if (activeTab === 'match') {
+      initializeMatchGame();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeTab, filteredFlashcards.length, combinedFlashcards.length]);
+
+  // Reset game when switching away from match tab
+  useEffect(() => {
+    if (activeTab !== 'match') {
+      setMatchCards([]);
+      setSelectedCards([]);
+      setMatchScore(0);
+      setMatchPairs(0);
+    }
+  }, [activeTab]);
+
+  // Initialize quiz when quiz tab is opened or filters change
+  useEffect(() => {
+    if (activeTab === 'quiz') {
+      generateQuizQuestions();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeTab, filteredFlashcards.length, combinedFlashcards.length]);
+
+  // Reset quiz when switching away from quiz tab
+  useEffect(() => {
+    if (activeTab !== 'quiz') {
+      setQuizQuestions([]);
+      setQuizAnswers([]);
+      setQuizIndex(0);
+      setShowQuizResult(false);
+    }
+  }, [activeTab]);
+
   const tabs = [
     { id: 'grammar', icon: BookOpen, label: 'Grammar' },
     { id: 'vocab', icon: MessageSquare, label: 'Vocabulary' },
     { id: 'quiz', icon: Brain, label: 'Quiz' },
-    { id: 'translate', icon: Languages, label: 'Translate' }
+    { id: 'translate', icon: Languages, label: 'Translate' },
+    { id: 'match', icon: Grid, label: 'Match' }
   ];
 
   return (
@@ -664,22 +838,36 @@ export default function LanguageLearningApp() {
 
           {activeTab === 'quiz' && (
             <div>
-              <h2 className="text-2xl font-bold text-gray-800 mb-6">Quiz</h2>
-              {!showQuizResult ? (
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-2xl font-bold text-gray-800">Quiz</h2>
+                <button
+                  onClick={generateQuizQuestions}
+                  className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+                >
+                  <RotateCw size={20} /> New Quiz
+                </button>
+              </div>
+
+              {quizQuestions.length === 0 ? (
+                <div className="text-center py-12 text-gray-500">
+                  <p>No flashcards available for quiz.</p>
+                  <p className="text-sm mt-2">Try adjusting your filters or add more flashcards.</p>
+                </div>
+              ) : !showQuizResult ? (
                 <>
                   <div className="mb-6">
-                    <div className="text-sm text-gray-600 mb-2">Question {quizIndex + 1} of {quizData.length}</div>
+                    <div className="text-sm text-gray-600 mb-2">Question {quizIndex + 1} of {quizQuestions.length}</div>
                     <div className="h-2 bg-gray-200 rounded-full">
                       <div 
                         className="h-2 bg-indigo-600 rounded-full transition-all"
-                        style={{ width: `${((quizIndex + 1) / quizData.length) * 100}%` }}
+                        style={{ width: `${((quizIndex + 1) / quizQuestions.length) * 100}%` }}
                       />
                     </div>
                   </div>
                   <div className="mb-6">
-                    <p className="text-xl font-semibold mb-4">{quizData[quizIndex].question}</p>
+                    <p className="text-xl font-semibold mb-4">{quizQuestions[quizIndex].question}</p>
                     <div className="space-y-3">
-                      {quizData[quizIndex].options.map((option, index) => (
+                      {quizQuestions[quizIndex].options.map((option, index) => (
                         <button
                           key={index}
                           onClick={() => handleQuizAnswer(index)}
@@ -705,7 +893,7 @@ export default function LanguageLearningApp() {
                     )}
                     <button
                       onClick={() => {
-                        if (quizIndex < quizData.length - 1) {
+                        if (quizIndex < quizQuestions.length - 1) {
                           setQuizIndex(quizIndex + 1);
                         } else {
                           setShowQuizResult(true);
@@ -714,7 +902,7 @@ export default function LanguageLearningApp() {
                       disabled={quizAnswers[quizIndex] === undefined}
                       className="ml-auto flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                      {quizIndex < quizData.length - 1 ? 'Next' : 'Finish'} <ChevronRight size={20} />
+                      {quizIndex < quizQuestions.length - 1 ? 'Next' : 'Finish'} <ChevronRight size={20} />
                     </button>
                   </div>
                 </>
@@ -722,21 +910,28 @@ export default function LanguageLearningApp() {
                 <div className="text-center">
                   <div className="mb-6">
                     <div className="text-6xl font-bold text-indigo-600 mb-2">
-                      {calculateScore()} / {quizData.length}
+                      {calculateScore()} / {quizQuestions.length}
                     </div>
                     <p className="text-xl text-gray-600">
-                      {calculateScore() === quizData.length ? 'Perfect!' : calculateScore() >= quizData.length * 0.7 ? 'Great job!' : 'Keep practicing!'}
+                      {calculateScore() === quizQuestions.length ? 'Perfect!' : calculateScore() >= quizQuestions.length * 0.7 ? 'Great job!' : 'Keep practicing!'}
                     </p>
                   </div>
                   <div className="space-y-3 mb-6">
-                    {quizData.map((q, index) => (
+                    {quizQuestions.map((q, index) => (
                       <div key={index} className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
                         {quizAnswers[index] === q.correct ? (
                           <Check className="text-green-600" size={24} />
                         ) : (
                           <X className="text-red-600" size={24} />
                         )}
-                        <span className="text-sm">{q.question}</span>
+                        <div className="flex-1">
+                          <span className="text-sm font-medium">{q.question}</span>
+                          {quizAnswers[index] !== q.correct && (
+                            <div className="text-xs text-gray-500 mt-1">
+                              Correct: {q.options[q.correct]}
+                            </div>
+                          )}
+                        </div>
                       </div>
                     ))}
                   </div>
@@ -805,6 +1000,109 @@ export default function LanguageLearningApp() {
                   </div>
                 )}
               </div>
+            </div>
+          )}
+
+          {activeTab === 'match' && (
+            <div>
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-2xl font-bold text-gray-800">Memory Match</h2>
+                <button
+                  onClick={initializeMatchGame}
+                  className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+                >
+                  <RotateCw size={20} /> New Game
+                </button>
+              </div>
+
+              {/* Score display */}
+              <div className="mb-6 flex justify-center gap-6">
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-indigo-600">{matchPairs}</div>
+                  <div className="text-sm text-gray-600">Pairs Matched</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-indigo-600">{matchScore}</div>
+                  <div className="text-sm text-gray-600">Score</div>
+                </div>
+              </div>
+
+              {matchCards.length === 0 ? (
+                <div className="text-center py-12 text-gray-500">
+                  <p>No flashcards available for matching.</p>
+                  <p className="text-sm mt-2">Try adjusting your filters or add more flashcards.</p>
+                </div>
+              ) : (
+                <>
+                  {/* Game completion message */}
+                  {matchPairs > 0 && matchPairs === matchCards.length / 2 && (
+                    <div className="mb-6 p-4 bg-green-50 border-2 border-green-200 rounded-lg text-center">
+                      <div className="text-2xl font-bold text-green-600 mb-2">🎉 Congratulations!</div>
+                      <p className="text-gray-700">You've matched all pairs!</p>
+                    </div>
+                  )}
+
+                  {/* Card grid */}
+                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                    {matchCards.map((card, index) => (
+                      <div
+                        key={card.id}
+                        onClick={() => handleMatchCardClick(index)}
+                        className={`relative h-32 cursor-pointer perspective-1000 ${
+                          card.isMatched ? 'opacity-50 cursor-not-allowed' : ''
+                        }`}
+                      >
+                        <div
+                          className={`relative w-full h-full transition-transform duration-500 transform-style-3d ${
+                            card.isFlipped || card.isMatched ? 'rotate-y-180' : ''
+                          }`}
+                        >
+                          {/* Back of card (question mark) */}
+                          <div className="absolute inset-0 rounded-lg bg-indigo-500 shadow-lg flex items-center justify-center backface-hidden">
+                            <div className="text-white text-3xl font-bold">?</div>
+                          </div>
+
+                          {/* Front of card (content) */}
+                          <div
+                            className={`absolute inset-0 rounded-lg shadow-lg flex flex-col items-center justify-center p-3 backface-hidden rotate-y-180 ${
+                              card.isMatched
+                                ? 'bg-green-100 border-2 border-green-400'
+                                : card.language === 'en'
+                                ? 'bg-white border-2 border-blue-200'
+                                : 'bg-blue-50 border-2 border-blue-400'
+                            }`}
+                          >
+                            <div
+                              className={`text-xs mb-1 ${
+                                card.language === 'en' ? 'text-gray-500' : 'text-blue-600'
+                              }`}
+                            >
+                              {card.language === 'en' ? 'English' : 'Français'}
+                            </div>
+                            <div
+                              className={`text-sm font-semibold text-center ${
+                                card.isMatched ? 'text-green-700' : 'text-gray-800'
+                              }`}
+                            >
+                              {card.content}
+                            </div>
+                            {card.isMatched && (
+                              <Check className="absolute top-2 right-2 text-green-600" size={20} />
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Instructions */}
+                  <div className="mt-6 p-4 bg-gray-50 rounded-lg">
+                    <p className="text-sm text-gray-600 text-center">
+                      Click cards to flip them. Match English cards with their French translations!
+                    </p>
+                  </div>
+                </>
+              )}
             </div>
           )}
         </div>
