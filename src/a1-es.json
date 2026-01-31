@@ -1,0 +1,76 @@
+[
+  {
+    "id": "a1_svo",
+    "level": "A1",
+    "category": "syntax",
+    "english": "Subject + Verb + Object",
+    "spanish": "Sujeto + Verbo + Objeto",
+    "examples": [
+      { "en": "I eat apples", "es": "Como manzanas" },
+      { "en": "I like apples", "es": "Me gustan las manzanas" },
+      { "en": "I like music", "es": "Me gusta la música" },
+      { "en": "She eats apples", "es": "Ella come manzanas" },
+      { "en": "She likes apples", "es": "A ella le gustan las manzanas" },
+      { "en": "She likes music", "es": "A ella le gusta la música" },
+      { "en": "We eat apples", "es": "Comemos manzanas" },
+      { "en": "We like apples", "es": "Nos gustan las manzanas" },
+      { "en": "We like music", "es": "Nos gusta la música" }
+    ],
+    "tags": ["word-order"]
+  },
+  {
+    "id": "a1_present_ser",
+    "level": "A1",
+    "category": "tense",
+    "english": "Present tense of to be",
+    "spanish": "Presente del verbo ser/estar",
+    "examples": [
+      { "en": "I am happy", "es": "Estoy contento" },
+      { "en": "I am ready", "es": "Estoy listo" },
+      { "en": "He is happy", "es": "Él está contento" },
+      { "en": "He is ready", "es": "Él está listo" }
+    ],
+    "tags": ["present", "ser", "estar"]
+  },
+  {
+    "id": "a1_negation_no",
+    "level": "A1",
+    "category": "negation",
+    "english": "Negation with do not",
+    "spanish": "Negación con no",
+    "examples": [
+      { "en": "I do not understand", "es": "No entiendo" },
+      { "en": "I do not like", "es": "No me gusta" },
+      { "en": "We do not understand", "es": "No entendemos" },
+      { "en": "We do not like", "es": "No nos gusta" }
+    ],
+    "tags": ["negation"]
+  },
+  {
+    "id": "a1_questions_question",
+    "level": "A1",
+    "category": "question",
+    "english": "Questions with do you",
+    "spanish": "Preguntas con ¿...?",
+    "examples": [
+      { "en": "Do you speak Spanish?", "es": "¿Hablas español?" },
+      { "en": "Do you like Spanish?", "es": "¿Te gusta el español?" },
+      { "en": "Do you like coffee?", "es": "¿Te gusta el café?" }
+    ],
+    "tags": ["questions"]
+  },
+  {
+    "id": "a1_adjectives_position",
+    "level": "A1",
+    "category": "adjective",
+    "english": "Adjectives after the noun",
+    "spanish": "Adjetivos después del sustantivo",
+    "examples": [
+      { "en": "a red car", "es": "un coche rojo" },
+      { "en": "a red house", "es": "una casa roja" },
+      { "en": "a big car", "es": "un coche grande" },
+      { "en": "a big house", "es": "una casa grande" }
+    ],
+    "tags": ["adjectives"]
+  }
+]

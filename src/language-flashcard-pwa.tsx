@@ -7,12 +7,22 @@ import {
   MatchTab,
   BottomNav,
 } from './components';
-import { allRules, generateFlashcardsFromRule, vocabData } from './data';
-import type { GeneratedFlashcard, QuizQuestion, MatchCard } from './types';
+import {
+  getAllRules,
+  generateFlashcardsFromRule,
+  getVocabData,
+} from './data';
+import type { GeneratedFlashcard, QuizQuestion, MatchCard, TargetLanguage } from './types';
 import type { AddFlashcardFormData } from './types';
 import './components/flashcard-styles.css';
 
+const TARGET_LANGUAGE_LABELS: Record<TargetLanguage, string> = {
+  fr: 'Français',
+  es: 'Español',
+};
+
 export default function LanguageLearningApp() {
+  const [targetLanguage, setTargetLanguage] = useState<TargetLanguage>('fr');
   const [activeTab, setActiveTab] = useState('grammar');
   const [grammarIndex, setGrammarIndex] = useState(0);
   const [vocabIndex, setVocabIndex] = useState(0);
@@ -23,7 +33,7 @@ export default function LanguageLearningApp() {
   const [quizQuestions, setQuizQuestions] = useState<QuizQuestion[]>([]);
   const [translationInput, setTranslationInput] = useState('');
   const [translationResult, setTranslationResult] = useState('');
-  const [translationDirection, setTranslationDirection] = useState<'en-fr' | 'fr-en'>('en-fr');
+  const [translationDirection, setTranslationDirection] = useState<'en-target' | 'target-en'>('en-target');
   const [selectedLevel, setSelectedLevel] = useState<string>('all');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [showAddForm, setShowAddForm] = useState(false);
@@ -32,13 +42,30 @@ export default function LanguageLearningApp() {
   const [matchScore, setMatchScore] = useState(0);
   const [matchPairs, setMatchPairs] = useState(0);
   const [isCheckingMatch, setIsCheckingMatch] = useState(false);
+
   const [customFlashcards, setCustomFlashcards] = useState<GeneratedFlashcard[]>(() => {
     try {
       if (typeof window !== 'undefined' && window.localStorage) {
-        const saved = localStorage.getItem('customFlashcards');
+        // Try language-specific key first
+        let saved = localStorage.getItem('customFlashcards_fr');
         if (saved) {
           const parsed = JSON.parse(saved);
           if (Array.isArray(parsed)) return parsed;
+        }
+        // Migrate old key (legacy) to customFlashcards_fr
+        saved = localStorage.getItem('customFlashcards');
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (Array.isArray(parsed)) {
+            const migrated = parsed.map((c: { french?: string; ruleFrench?: string; [k: string]: unknown }) => ({
+              ...c,
+              target: c.target ?? c.french,
+              ruleTarget: c.ruleTarget ?? c.ruleFrench,
+            }));
+            localStorage.setItem('customFlashcards_fr', JSON.stringify(migrated));
+            localStorage.removeItem('customFlashcards');
+            return migrated as GeneratedFlashcard[];
+          }
         }
       }
     } catch (error) {
@@ -47,10 +74,29 @@ export default function LanguageLearningApp() {
     return [];
   });
 
+  // Reload custom flashcards when target language changes
   useEffect(() => {
     try {
       if (typeof window !== 'undefined' && window.localStorage) {
-        localStorage.setItem('customFlashcards', JSON.stringify(customFlashcards));
+        const saved = localStorage.getItem(`customFlashcards_${targetLanguage}`);
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (Array.isArray(parsed)) {
+            setCustomFlashcards(parsed);
+            return;
+          }
+        }
+        setCustomFlashcards([]);
+      }
+    } catch (error) {
+      console.error('Error loading custom flashcards from localStorage:', error);
+    }
+  }, [targetLanguage]);
+
+  useEffect(() => {
+    try {
+      if (typeof window !== 'undefined' && window.localStorage) {
+        localStorage.setItem(`customFlashcards_${targetLanguage}`, JSON.stringify(customFlashcards));
       }
     } catch (error) {
       console.error('Error saving custom flashcards to localStorage:', error);
@@ -58,9 +104,16 @@ export default function LanguageLearningApp() {
         alert('Warning: Could not save flashcard to browser storage. Storage may be full.');
       }
     }
-  }, [customFlashcards]);
+  }, [customFlashcards, targetLanguage]);
 
-  const allFlashcards = useMemo(() => allRules.flatMap(generateFlashcardsFromRule), []);
+  const allRules = useMemo(() => getAllRules(targetLanguage), [targetLanguage]);
+  const vocabData = useMemo(() => getVocabData(targetLanguage), [targetLanguage]);
+  const targetLanguageLabel = TARGET_LANGUAGE_LABELS[targetLanguage];
+
+  const allFlashcards = useMemo(
+    () => allRules.flatMap(generateFlashcardsFromRule),
+    [allRules],
+  );
   const combinedFlashcards = useMemo(
     () => [...allFlashcards, ...customFlashcards],
     [allFlashcards, customFlashcards],
@@ -78,7 +131,7 @@ export default function LanguageLearningApp() {
   const levels = useMemo(() => {
     const allLevels = [...allRules.map((r) => r.level), ...customFlashcards.map((c) => c.level)];
     return ['all', ...Array.from(new Set(allLevels))];
-  }, [customFlashcards]);
+  }, [allRules, customFlashcards]);
 
   const categories = useMemo(() => {
     const allCategories = [
@@ -86,12 +139,12 @@ export default function LanguageLearningApp() {
       ...customFlashcards.map((c) => c.category),
     ];
     return ['all', ...Array.from(new Set(allCategories))];
-  }, [customFlashcards]);
+  }, [allRules, customFlashcards]);
 
   useEffect(() => {
     setGrammarIndex(0);
     setFlipped(false);
-  }, [selectedLevel, selectedCategory]);
+  }, [selectedLevel, selectedCategory, targetLanguage]);
 
   useEffect(() => {
     if (grammarIndex >= filteredFlashcards.length && filteredFlashcards.length > 0) {
@@ -132,15 +185,15 @@ export default function LanguageLearningApp() {
     const questions: QuizQuestion[] = selectedCards.map((flashcard) => {
       const direction = Math.random() > 0.5 ? 'en-fr' : 'fr-en';
       const questionText =
-        direction === 'en-fr' ? flashcard.english : flashcard.french;
+        direction === 'en-fr' ? flashcard.english : flashcard.target;
       const correctAnswer =
-        direction === 'en-fr' ? flashcard.french : flashcard.english;
+        direction === 'en-fr' ? flashcard.target : flashcard.english;
       const otherCards = availableCards.filter((c) => c.id !== flashcard.id);
       const shuffledOthers = [...otherCards].sort(() => Math.random() - 0.5);
       const numWrongAnswers = Math.min(3, otherCards.length);
       const wrongAnswers = shuffledOthers
         .slice(0, numWrongAnswers)
-        .map((c) => (direction === 'en-fr' ? c.french : c.english));
+        .map((c) => (direction === 'en-fr' ? c.target : c.english));
       const allOptions = [correctAnswer, ...wrongAnswers].sort(
         () => Math.random() - 0.5,
       );
@@ -149,7 +202,7 @@ export default function LanguageLearningApp() {
       return {
         question:
           direction === 'en-fr'
-            ? `Translate to French: "${questionText}"`
+            ? `Translate to ${targetLanguageLabel}: "${questionText}"`
             : `Translate to English: "${questionText}"`,
         questionText,
         options: allOptions,
@@ -189,9 +242,9 @@ export default function LanguageLearningApp() {
         isMatched: false,
       });
       cards.push({
-        id: `fr_${flashcard.id}`,
-        content: flashcard.french,
-        language: 'fr',
+        id: `target_${flashcard.id}`,
+        content: flashcard.target,
+        language: 'target',
         flashcardId: flashcard.id,
         isFlipped: false,
         isMatched: false,
@@ -254,7 +307,7 @@ export default function LanguageLearningApp() {
 
   useEffect(() => {
     if (activeTab === 'match') initializeMatchGame();
-  }, [activeTab, filteredFlashcards.length, combinedFlashcards.length]);
+  }, [activeTab, filteredFlashcards.length, combinedFlashcards.length, targetLanguage]);
 
   useEffect(() => {
     if (activeTab !== 'match') {
@@ -267,7 +320,7 @@ export default function LanguageLearningApp() {
 
   useEffect(() => {
     if (activeTab === 'quiz') generateQuizQuestions();
-  }, [activeTab, filteredFlashcards.length, combinedFlashcards.length]);
+  }, [activeTab, filteredFlashcards.length, combinedFlashcards.length, targetLanguage]);
 
   useEffect(() => {
     if (activeTab !== 'quiz') {
@@ -282,27 +335,27 @@ export default function LanguageLearningApp() {
     const input = translationInput.toLowerCase().trim();
 
     const vocab = vocabData.find((v) =>
-      translationDirection === 'en-fr'
+      translationDirection === 'en-target'
         ? v.english.toLowerCase() === input
-        : v.french.toLowerCase() === input,
+        : v.target.toLowerCase() === input,
     );
 
     if (vocab) {
       setTranslationResult(
-        translationDirection === 'en-fr' ? vocab.french : vocab.english,
+        translationDirection === 'en-target' ? vocab.target : vocab.english,
       );
       return;
     }
 
     const flashcard = combinedFlashcards.find((card) =>
-      translationDirection === 'en-fr'
+      translationDirection === 'en-target'
         ? card.english.toLowerCase() === input
-        : card.french.toLowerCase() === input,
+        : card.target.toLowerCase() === input,
     );
 
     if (flashcard) {
       setTranslationResult(
-        translationDirection === 'en-fr' ? flashcard.french : flashcard.english,
+        translationDirection === 'en-target' ? flashcard.target : flashcard.english,
       );
     } else {
       setTranslationResult('Translation not found');
@@ -314,11 +367,11 @@ export default function LanguageLearningApp() {
       id: `custom_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
       ruleId: 'custom',
       ruleEnglish: flashcardData.ruleEnglish || 'Custom flashcard',
-      ruleFrench: flashcardData.ruleFrench || 'Carte personnalisée',
+      ruleTarget: flashcardData.ruleTarget || (targetLanguage === 'fr' ? 'Carte personnalisée' : 'Tarjeta personalizada'),
       level: flashcardData.level,
       category: flashcardData.category,
       english: flashcardData.english,
-      french: flashcardData.french,
+      target: flashcardData.target,
       tags: flashcardData.tags || [],
     };
 
@@ -333,7 +386,32 @@ export default function LanguageLearningApp() {
           <h1 className="text-3xl font-bold text-indigo-900 mb-2">
             Language Learning
           </h1>
-          <p className="text-gray-600">English ⇄ Français</p>
+          <div className="flex items-center justify-center gap-4 mt-4">
+            <span className="text-gray-600">Learn:</span>
+            <div className="flex gap-2">
+              <button
+                onClick={() => setTargetLanguage('fr')}
+                className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                  targetLanguage === 'fr'
+                    ? 'bg-indigo-600 text-white'
+                    : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                }`}
+              >
+                Français
+              </button>
+              <button
+                onClick={() => setTargetLanguage('es')}
+                className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                  targetLanguage === 'es'
+                    ? 'bg-indigo-600 text-white'
+                    : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                }`}
+              >
+                Español
+              </button>
+            </div>
+            <span className="text-gray-600 text-sm">English ⇄ {targetLanguageLabel}</span>
+          </div>
         </header>
 
         <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
@@ -347,6 +425,7 @@ export default function LanguageLearningApp() {
               levels={levels}
               categories={categories}
               showAddForm={showAddForm}
+              targetLanguageLabel={targetLanguageLabel}
               onSetFlipped={setFlipped}
               onSetSelectedLevel={setSelectedLevel}
               onSetSelectedCategory={setSelectedCategory}
@@ -363,8 +442,10 @@ export default function LanguageLearningApp() {
 
           {activeTab === 'vocab' && (
             <VocabTab
+              vocabData={vocabData}
               vocabIndex={vocabIndex}
               flipped={flipped}
+              targetLanguageLabel={targetLanguageLabel}
               onSetFlipped={setFlipped}
               onPrev={() => handlePrev(vocabIndex, vocabData.length, setVocabIndex)}
               onNext={() => handleNext(vocabIndex, vocabData.length, setVocabIndex)}
@@ -395,6 +476,7 @@ export default function LanguageLearningApp() {
               translationInput={translationInput}
               translationResult={translationResult}
               translationDirection={translationDirection}
+              targetLanguageLabel={targetLanguageLabel}
               onSetTranslationInput={setTranslationInput}
               onSetTranslationDirection={setTranslationDirection}
               onTranslate={handleTranslate}
@@ -406,6 +488,7 @@ export default function LanguageLearningApp() {
               matchCards={matchCards}
               matchPairs={matchPairs}
               matchScore={matchScore}
+              targetLanguageLabel={targetLanguageLabel}
               onNewGame={initializeMatchGame}
               onCardClick={handleMatchCardClick}
             />

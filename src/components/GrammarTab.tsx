@@ -13,6 +13,7 @@ interface GrammarTabProps {
   levels: string[];
   categories: string[];
   showAddForm: boolean;
+  targetLanguageLabel?: string;
   onSetFlipped: (flipped: boolean) => void;
   onSetSelectedLevel: (level: string) => void;
   onSetSelectedCategory: (category: string) => void;
@@ -31,6 +32,7 @@ export default function GrammarTab({
   levels,
   categories,
   showAddForm,
+  targetLanguageLabel = 'Français',
   onSetFlipped,
   onSetSelectedLevel,
   onSetSelectedCategory,
@@ -57,6 +59,7 @@ export default function GrammarTab({
           onAdd={onAddFlashcard}
           availableLevels={levels.filter((l) => l !== 'all')}
           availableCategories={categories.filter((c) => c !== 'all')}
+          targetLanguageLabel={targetLanguageLabel}
         />
       )}
 
@@ -106,15 +109,16 @@ export default function GrammarTab({
 
           <FlashCard
             front={filteredFlashcards[grammarIndex].english}
-            back={filteredFlashcards[grammarIndex].french}
+            back={filteredFlashcards[grammarIndex].target}
             flipped={flipped}
             onFlip={() => onSetFlipped(!flipped)}
+            targetLanguageLabel={targetLanguageLabel}
           />
 
           <div className="mt-4 p-4 bg-gray-50 rounded-lg">
             <p className="text-sm text-gray-600 mb-1">Rule:</p>
             <p className="text-gray-800 text-sm">{filteredFlashcards[grammarIndex].ruleEnglish}</p>
-            <p className="text-blue-600 text-sm">{filteredFlashcards[grammarIndex].ruleFrench}</p>
+            <p className="text-blue-600 text-sm">{filteredFlashcards[grammarIndex].ruleTarget}</p>
           </div>
 
           <div className="flex justify-between items-center mt-6">

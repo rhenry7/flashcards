@@ -1,16 +1,23 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import FlashCard from './FlashCard';
-import { vocabData } from '../data';
+
+interface VocabItem {
+  english: string;
+  target: string;
+  category: string;
+}
 
 interface VocabTabProps {
+  vocabData: VocabItem[];
   vocabIndex: number;
   flipped: boolean;
+  targetLanguageLabel?: string;
   onSetFlipped: (flipped: boolean) => void;
   onPrev: () => void;
   onNext: () => void;
 }
 
-export default function VocabTab({ vocabIndex, flipped, onSetFlipped, onPrev, onNext }: VocabTabProps) {
+export default function VocabTab({ vocabData, vocabIndex, flipped, targetLanguageLabel = 'Français', onSetFlipped, onPrev, onNext }: VocabTabProps) {
   return (
     <div>
       <h2 className="text-2xl font-bold text-gray-800 mb-6">Vocabulary</h2>
@@ -21,9 +28,10 @@ export default function VocabTab({ vocabIndex, flipped, onSetFlipped, onPrev, on
       </div>
       <FlashCard
         front={vocabData[vocabIndex].english}
-        back={vocabData[vocabIndex].french}
+        back={vocabData[vocabIndex].target}
         flipped={flipped}
         onFlip={() => onSetFlipped(!flipped)}
+        targetLanguageLabel={targetLanguageLabel}
       />
       <div className="flex justify-between items-center mt-6">
         <button

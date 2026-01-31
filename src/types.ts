@@ -1,6 +1,8 @@
+export type TargetLanguage = 'fr' | 'es';
+
 export interface Example {
   en: string;
-  fr: string;
+  target: string; // French or Spanish translation
 }
 
 export interface GrammarRule {
@@ -8,7 +10,7 @@ export interface GrammarRule {
   level: string;
   category: string;
   english: string;
-  french: string;
+  ruleTarget: string; // Rule description in target language
   examples: Example[];
   tags: string[];
 }
@@ -17,11 +19,11 @@ export interface GeneratedFlashcard {
   id: string;
   ruleId: string;
   ruleEnglish: string;
-  ruleFrench: string;
+  ruleTarget: string;
   level: string;
   category: string;
   english: string;
-  french: string;
+  target: string; // Translation in target language
   tags: string[];
 }
 
@@ -37,7 +39,7 @@ export interface QuizQuestion {
 export interface MatchCard {
   id: string;
   content: string;
-  language: 'en' | 'fr';
+  language: 'en' | 'target';
   flashcardId: string;
   isFlipped: boolean;
   isMatched: boolean;
@@ -45,10 +47,10 @@ export interface MatchCard {
 
 export interface AddFlashcardFormData {
   english: string;
-  french: string;
+  target: string;
   level: string;
   category: string;
   ruleEnglish?: string;
-  ruleFrench?: string;
+  ruleTarget?: string;
   tags?: string[];
 }

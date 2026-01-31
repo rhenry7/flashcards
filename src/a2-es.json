@@ -1,0 +1,56 @@
+[
+  {
+    "id": "a2_preterito",
+    "level": "A2",
+    "category": "tense",
+    "english": "Completed past action",
+    "spanish": "Pretérito indefinido",
+    "examples": [
+      { "en": "I ate", "es": "Comí" },
+      { "en": "I finished", "es": "Terminé" },
+      { "en": "He ate", "es": "Él comió" },
+      { "en": "He finished", "es": "Él terminó" }
+    ],
+    "tags": ["past", "preterito"]
+  },
+  {
+    "id": "a2_imperfecto",
+    "level": "A2",
+    "category": "tense",
+    "english": "Ongoing past state",
+    "spanish": "Imperfecto",
+    "examples": [
+      { "en": "I was tired", "es": "Estaba cansado" },
+      { "en": "I was happy", "es": "Estaba contento" },
+      { "en": "She was tired", "es": "Ella estaba cansada" },
+      { "en": "She was happy", "es": "Ella estaba contenta" }
+    ],
+    "tags": ["imperfecto"]
+  },
+  {
+    "id": "a2_futuro_simple",
+    "level": "A2",
+    "category": "tense",
+    "english": "Simple future",
+    "spanish": "Futuro simple",
+    "examples": [
+      { "en": "I will go", "es": "Iré" },
+      { "en": "I will win", "es": "Ganaré" },
+      { "en": "They will go", "es": "Ellos irán" },
+      { "en": "They will win", "es": "Ellos ganarán" }
+    ],
+    "tags": ["future"]
+  },
+  {
+    "id": "a2_pronoun_aqui",
+    "level": "A2",
+    "category": "pronoun",
+    "english": "Object pronoun there",
+    "spanish": "Pronombre ahí/allí",
+    "examples": [
+      { "en": "I go there", "es": "Voy allí" },
+      { "en": "He goes there", "es": "Él va allí" }
+    ],
+    "tags": ["pronouns"]
+  }
+]

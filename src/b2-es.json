@@ -1,0 +1,148 @@
+[
+  {
+    "id": "b2_subjunctive_need",
+    "level": "B2",
+    "category": "mood",
+    "english": "Necessity with that",
+    "spanish": "Subjuntivo después de es necesario que",
+    "examples": [
+      { "en": "It is necessary that he come", "es": "Es necesario que él venga" },
+      { "en": "It is necessary that he leave", "es": "Es necesario que él se vaya" }
+    ],
+    "tags": ["subjunctive"]
+  },
+  {
+    "id": "b2_passive",
+    "level": "B2",
+    "category": "syntax",
+    "english": "Passive voice",
+    "spanish": "Voz pasiva",
+    "examples": [
+      { "en": "The book was written", "es": "El libro fue escrito" },
+      { "en": "The house was built", "es": "La casa fue construida" }
+    ],
+    "tags": ["passive"]
+  },
+  {
+    "id": "b2_hypothesis_si",
+    "level": "B2",
+    "category": "syntax",
+    "english": "Hypothetical condition",
+    "spanish": "Oración condicional con si",
+    "examples": [
+      { "en": "If I had time, I would go", "es": "Si tuviera tiempo, iría" },
+      { "en": "If I had time, I would help", "es": "Si tuviera tiempo, ayudaría" },
+      { "en": "If I knew, I would go", "es": "Si supiera, iría" },
+      { "en": "If I knew, I would help", "es": "Si supiera, ayudaría" }
+    ],
+    "tags": ["hypothesis"]
+  },
+  {
+    "id": "b2_si_present_future",
+    "level": "B2",
+    "category": "syntax",
+    "english": "Real condition (present → future)",
+    "spanish": "Si + presente → futuro",
+    "examples": [
+      { "en": "If it rains, I will stay", "es": "Si llueve, me quedaré" },
+      { "en": "If you come, we will start", "es": "Si vienes, empezaremos" }
+    ],
+    "tags": ["si", "condition"]
+  },
+  {
+    "id": "b2_si_imperfecto_conditional",
+    "level": "B2",
+    "category": "syntax",
+    "english": "Unreal present condition",
+    "spanish": "Si + imperfecto subjuntivo → condicional",
+    "examples": [
+      { "en": "If I were rich, I would travel", "es": "Si fuera rico, viajaría" },
+      { "en": "If we had time, we would stay", "es": "Si tuviéramos tiempo, nos quedaríamos" }
+    ],
+    "tags": ["si", "hypothesis"]
+  },
+  {
+    "id": "b2_si_pluscuamperfecto_conditional",
+    "level": "B2",
+    "category": "syntax",
+    "english": "Unreal past condition",
+    "spanish": "Si + pluscuamperfecto subjuntivo → condicional perfecto",
+    "examples": [
+      { "en": "If I had known, I would have helped", "es": "Si hubiera sabido, habría ayudado" },
+      { "en": "If we had left earlier, we would have arrived", "es": "Si hubiéramos salido antes, habríamos llegado" }
+    ],
+    "tags": ["si", "hypothesis"]
+  },
+  {
+    "id": "b2_ya_no",
+    "level": "B2",
+    "category": "negation",
+    "english": "No longer",
+    "spanish": "Ya no",
+    "examples": [
+      { "en": "I no longer smoke", "es": "Ya no fumo" },
+      { "en": "She no longer lives here", "es": "Ella ya no vive aquí" }
+    ],
+    "tags": ["negation"]
+  },
+  {
+    "id": "b2_nunca",
+    "level": "B2",
+    "category": "negation",
+    "english": "Never",
+    "spanish": "Nunca",
+    "examples": [
+      { "en": "I never understood", "es": "Nunca entendí" },
+      { "en": "He never came back", "es": "Nunca volvió" }
+    ],
+    "tags": ["negation"]
+  },
+  {
+    "id": "b2_no_hay",
+    "level": "B2",
+    "category": "syntax",
+    "english": "There is / there are (negative)",
+    "spanish": "No hay",
+    "examples": [
+      { "en": "There is nothing to do", "es": "No hay nada que hacer" },
+      { "en": "There is no solution", "es": "No hay solución" }
+    ],
+    "tags": ["impersonal"]
+  },
+  {
+    "id": "b2_conditionnel_polite",
+    "level": "B2",
+    "category": "mood",
+    "english": "Polite request",
+    "spanish": "Condicional de cortesía",
+    "examples": [
+      { "en": "I would like a coffee", "es": "Me gustaría un café" },
+      { "en": "Could you help me?", "es": "¿Podría ayudarme?" }
+    ],
+    "tags": ["conditionnel"]
+  },
+  {
+    "id": "b2_subjunctive_emotion",
+    "level": "B2",
+    "category": "mood",
+    "english": "Subjunctive after emotion",
+    "spanish": "Subjuntivo después de emoción",
+    "examples": [
+      { "en": "I'm happy you came", "es": "Me alegro de que hayas venido" },
+      { "en": "She's afraid he leaves", "es": "Ella tiene miedo de que él se vaya" }
+    ],
+    "tags": ["subjuntivo"]
+  },
+  {
+    "id": "b2_time_sequence",
+    "level": "B2",
+    "category": "syntax",
+    "english": "Sequence of tenses",
+    "spanish": "Concordancia de tiempos",
+    "examples": [
+      { "en": "I thought he was coming", "es": "Pensaba que venía" },
+      { "en": "She said she would leave", "es": "Dijo que se iría" }
+    ],
+    "tags": ["tenses"]
+  }
+]

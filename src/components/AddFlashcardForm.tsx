@@ -7,6 +7,7 @@ interface AddFlashcardFormProps {
   onAdd: (data: AddFlashcardFormData) => void;
   availableLevels: string[];
   availableCategories: string[];
+  targetLanguageLabel?: string; // e.g., "French" or "Spanish"
 }
 
 export default function AddFlashcardForm({
@@ -14,20 +15,21 @@ export default function AddFlashcardForm({
   onAdd,
   availableLevels,
   availableCategories,
+  targetLanguageLabel = 'French',
 }: AddFlashcardFormProps) {
   const [english, setEnglish] = useState('');
-  const [french, setFrench] = useState('');
+  const [target, setTarget] = useState('');
   const [level, setLevel] = useState(availableLevels[0] || 'A1');
   const [category, setCategory] = useState(availableCategories[0] || '');
   const [ruleEnglish, setRuleEnglish] = useState('');
-  const [ruleFrench, setRuleFrench] = useState('');
+  const [ruleTarget, setRuleTarget] = useState('');
   const [tagsInput, setTagsInput] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!english.trim() || !french.trim() || !level || !category) {
-      alert('Please fill in all required fields (English, French, Level, Category)');
+    if (!english.trim() || !target.trim() || !level || !category) {
+      alert(`Please fill in all required fields (English, ${targetLanguageLabel}, Level, Category)`);
       return;
     }
 
@@ -38,18 +40,18 @@ export default function AddFlashcardForm({
 
     onAdd({
       english: english.trim(),
-      french: french.trim(),
+      target: target.trim(),
       level,
       category,
       ruleEnglish: ruleEnglish.trim() || undefined,
-      ruleFrench: ruleFrench.trim() || undefined,
+      ruleTarget: ruleTarget.trim() || undefined,
       tags: tags.length > 0 ? tags : undefined,
     });
 
     setEnglish('');
-    setFrench('');
+    setTarget('');
     setRuleEnglish('');
-    setRuleFrench('');
+    setRuleTarget('');
     setTagsInput('');
   };
 
@@ -80,14 +82,14 @@ export default function AddFlashcardForm({
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              French <span className="text-red-500">*</span>
+              {targetLanguageLabel} <span className="text-red-500">*</span>
             </label>
             <input
               type="text"
-              value={french}
-              onChange={(e) => setFrench(e.target.value)}
+              value={target}
+              onChange={(e) => setTarget(e.target.value)}
               className="w-full p-3 border-2 border-gray-300 rounded-lg focus:border-indigo-600 focus:outline-none"
-              placeholder="Enter French text"
+              placeholder={`Enter ${targetLanguageLabel} text`}
               required
             />
           </div>
@@ -149,12 +151,12 @@ export default function AddFlashcardForm({
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Rule (French) <span className="text-gray-400 text-xs">(optional)</span>
+              Rule ({targetLanguageLabel}) <span className="text-gray-400 text-xs">(optional)</span>
             </label>
             <input
               type="text"
-              value={ruleFrench}
-              onChange={(e) => setRuleFrench(e.target.value)}
+              value={ruleTarget}
+              onChange={(e) => setRuleTarget(e.target.value)}
               className="w-full p-3 border-2 border-gray-300 rounded-lg focus:border-indigo-600 focus:outline-none"
               placeholder="e.g., Sujet + Verbe + Complément"
             />

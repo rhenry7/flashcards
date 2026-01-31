@@ -1,9 +1,10 @@
 interface TranslateTabProps {
   translationInput: string;
   translationResult: string;
-  translationDirection: 'en-fr' | 'fr-en';
+  translationDirection: 'en-target' | 'target-en';
+  targetLanguageLabel?: string;
   onSetTranslationInput: (value: string) => void;
-  onSetTranslationDirection: (direction: 'en-fr' | 'fr-en') => void;
+  onSetTranslationDirection: (direction: 'en-target' | 'target-en') => void;
   onTranslate: () => void;
 }
 
@@ -11,6 +12,7 @@ export default function TranslateTab({
   translationInput,
   translationResult,
   translationDirection,
+  targetLanguageLabel = 'Français',
   onSetTranslationInput,
   onSetTranslationDirection,
   onTranslate,
@@ -20,26 +22,26 @@ export default function TranslateTab({
       <h2 className="text-2xl font-bold text-gray-800 mb-6">Translation</h2>
       <div className="mb-4 flex justify-center gap-4">
         <button
-          onClick={() => onSetTranslationDirection('en-fr')}
+          onClick={() => onSetTranslationDirection('en-target')}
           className={`px-4 py-2 rounded-lg ${
-            translationDirection === 'en-fr' ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-800'
+            translationDirection === 'en-target' ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-800'
           }`}
         >
-          English → French
+          English → {targetLanguageLabel}
         </button>
         <button
-          onClick={() => onSetTranslationDirection('fr-en')}
+          onClick={() => onSetTranslationDirection('target-en')}
           className={`px-4 py-2 rounded-lg ${
-            translationDirection === 'fr-en' ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-800'
+            translationDirection === 'target-en' ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-800'
           }`}
         >
-          French → English
+          {targetLanguageLabel} → English
         </button>
       </div>
       <div className="space-y-4">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            {translationDirection === 'en-fr' ? 'English' : 'Français'}
+            {translationDirection === 'en-target' ? 'English' : targetLanguageLabel}
           </label>
           <input
             type="text"
@@ -59,7 +61,7 @@ export default function TranslateTab({
         {translationResult && (
           <div className="p-4 bg-blue-50 border-2 border-blue-200 rounded-lg">
             <p className="text-sm text-gray-600 mb-1">
-              {translationDirection === 'en-fr' ? 'Français' : 'English'}
+              {translationDirection === 'en-target' ? targetLanguageLabel : 'English'}
             </p>
             <p className="text-xl font-semibold text-gray-800">{translationResult}</p>
           </div>

@@ -5,6 +5,7 @@ interface MatchTabProps {
   matchCards: MatchCardType[];
   matchPairs: number;
   matchScore: number;
+  targetLanguageLabel?: string;
   onNewGame: () => void;
   onCardClick: (index: number) => void;
 }
@@ -13,6 +14,7 @@ export default function MatchTab({
   matchCards,
   matchPairs,
   matchScore,
+  targetLanguageLabel = 'Français',
   onNewGame,
   onCardClick,
 }: MatchTabProps) {
@@ -85,7 +87,7 @@ export default function MatchTab({
                         card.language === 'en' ? 'text-gray-500' : 'text-blue-600'
                       }`}
                     >
-                      {card.language === 'en' ? 'English' : 'Français'}
+                      {card.language === 'en' ? 'English' : targetLanguageLabel}
                     </div>
                     <div
                       className={`text-sm font-semibold text-center ${
@@ -105,7 +107,7 @@ export default function MatchTab({
 
           <div className="mt-6 p-4 bg-gray-50 rounded-lg">
             <p className="text-sm text-gray-600 text-center">
-              Click cards to flip them. Match English cards with their French translations!
+              Click cards to flip them. Match English cards with their {targetLanguageLabel} translations!
             </p>
           </div>
         </>

@@ -1,0 +1,41 @@
+[
+  {
+    "id": "b1_imperfecto_vs_preterito",
+    "level": "B1",
+    "category": "tense",
+    "english": "Past description vs action",
+    "spanish": "Imperfecto vs pretérito",
+    "examples": [
+      { "en": "I was tired when I arrived", "es": "Estaba cansado cuando llegué" },
+      { "en": "I was tired when I left", "es": "Estaba cansado cuando me fui" },
+      { "en": "I was young when I arrived", "es": "Era joven cuando llegué" },
+      { "en": "I was young when I left", "es": "Era joven cuando me fui" }
+    ],
+    "tags": ["contrast"]
+  },
+  {
+    "id": "b1_conditional_polite",
+    "level": "B1",
+    "category": "mood",
+    "english": "Polite request",
+    "spanish": "Condicional de cortesía",
+    "examples": [
+      { "en": "I would like coffee", "es": "Me gustaría un café" },
+      { "en": "I would like help", "es": "Me gustaría ayuda" }
+    ],
+    "tags": ["conditional"]
+  },
+  {
+    "id": "b1_relative_que",
+    "level": "B1",
+    "category": "syntax",
+    "english": "Relative pronoun that",
+    "spanish": "Pronombre relativo que",
+    "examples": [
+      { "en": "The book that I read", "es": "El libro que leí" },
+      { "en": "The book that I watched", "es": "El libro que vi" },
+      { "en": "The movie that I watched", "es": "La película que vi" }
+    ],
+    "tags": ["relative"]
+  }
+]
